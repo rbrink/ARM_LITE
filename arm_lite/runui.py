@@ -45,7 +45,7 @@ if host == "x.x.x.x":
                 ip = addr.address
                 if ip != "127.0.0.1":
                     ip_list.append(addr.address)
-    host = ip_list[0] if ip_list else "127.0.0.1"
+    host = ip_list[2] if ip_list else "127.0.0.1"
 
 if __name__ == "__main__":
     port = cfg.arm_config.get("WEBSERVER_PORT")

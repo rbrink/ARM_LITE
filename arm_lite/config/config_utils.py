@@ -53,9 +53,9 @@ def yaml_check_list(key: str, value):
     if isinstance(value, (list, dict)):
         dumped_value = yaml.safe_dump(value, default_flow_style=False).strip()
         return f"{key}: {dumped_value}\n"
-
+    str_value = str(value)
     try:
-        post_value = int(value)
+        post_value = int(str_value)
         return f"{key}: {post_value}\n"
     except ValueError:
-        return yaml_check_bool(key, value)
+        return yaml_check_bool(key, str_value)

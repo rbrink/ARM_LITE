@@ -4,6 +4,8 @@
 ## ARM Options ##
 #################
 
+
+
 # A friendly name for this machine. Useful if you are running multiple instances.
 # Used in notification titles.
 ARM_NAME: ""
@@ -67,11 +69,9 @@ TRANSCODE_PATH: ""
 # Ripped and transcoded files end up here
 COMPLETED_PATH: ""
 
-# Path to installation of ARM
+# Path to installation of ARM 
 INSTALL_PATH: ""
 
-# Path to directory to hold log files
-# Make sure to include trailing /
 LOG_PATH: ""
 
 # Log level.  DEBUG, INFO, WARNING, ERROR, CRITICAL
@@ -102,7 +102,7 @@ MAXLENGTH: 99999
 
 # Method of MakeMKV to use for Blu Ray discs.  Options are "mkv", "backup" or "backup_dvd".
 # backup decrypts the dvd and then copies it to the hard drive.  This allows HandBrake to apply some of it's
-# analytical abilities such as the main-feature identification.  This method seems to offer success on bluray
+# analytical abilities such as the main-feature identification.  This method seems to offer success on bluray 
 # discs that fail in "mkv" mode. *** NOTE: MakeMKV only supports the backup or backup_dvd method on BluRay discs.
 # backup_dvd forces arm to extract the dvd with MakeMKV prior to the Handbrake step
 RIPMETHOD: "mkv"
@@ -118,12 +118,12 @@ MKV_ARGS: ""
 # Storage for a purchased key the user may have paid for. Populating will prevent the beta key updater from running.
 MAKEMKV_PERMA_KEY: ""
 
+# Handbrake binary to call.  These should be the same unless you are doing remote processing.
+HANDBRAKE_CLI: "C:/Program Files (x86)/HandBrake/HandBrakeCLI.exe"
+
 ##########################
 ## HandBrake Parameters ##
 ##########################
-
-# Handbrake binary to call.  These should be the same unless you are doing remote processing.
-HANDBRAKE_CLI: "C:/Program Files (x86)/HandBrake/HandBrakeCLI.exe"
 
 # Handbrake presets file
 HB_PRESETS_FILE: "C:/Program Files (x86)/HandBrake/presets.json"
@@ -156,6 +156,7 @@ AUDIO_RIP_FORMAT: ""
 
 # FFMPEG binary to call. These should be the same unless you are doing remote processing.
 FFMPEG_CLI: ""
+
 FFMPEG_LOCAL: ""
 
 # CLI Arguments for FFMPEG that go before the -i input_file. Can be found by doing ffmpeg -h.
@@ -177,16 +178,18 @@ WEBSERVER_IP: x.x.x.x
 
 # Port for web server
 WEBSERVER_PORT: 5000
+
 DEBUG_MODE: true
-FLASK_SECRET_KEY: ""
+
+FLASK_SECRET_KEY: "1ff7c030c2decf877b0cf98241eeb83b5a7e1987dc30348070e805e05b7ab23d"
 
 ######################
 # Metadata Providers #
 ######################
 
 # This selects the metadata provider, Each provider has their own ups and downs
-# But a general rule would be
-# OMDB for movies and shows
+# But a general rule would be 
+# OMDB for movies and shows 
 # TMDB for movies only
 # You will still need to provide an api key for the provider you have selected
 METADATA_PROVIDER: "omdb"
@@ -196,14 +199,14 @@ METADATA_PROVIDER: "omdb"
 # if "none" is used no label is identified
 GET_AUDIO_TITLE: ""
 
-# OMDB_API_KEY
+# OMDB_KEY
 # omdbapi.com API Key
 # See README-OMDBAPI for background and info
 # This is the API key for omdbapi.com queries.
 # More info at https://omdbapi.com/
 OMDB_KEY: ""
 
-# TMDB_API_KEY
+# TMDB_KEY
 # https://www.themoviedb.org/ API Key
 # See README-OMDBAPI for background and info
 # This is the API key for https://www.themoviedb.org/ queries.
