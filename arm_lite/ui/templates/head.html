@@ -1,0 +1,21 @@
+{% block head %}
+    <head>
+        <meta charset="utf-8">
+        <meta name="mobile-web-app-capable" content="yes"/>
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        <meta name="viewport" content="viewport-fit=cover, user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"
+            crossorigin="anonymous"></script>
+        
+        <!-- Set Page Title -->
+        {% if session["arm_name"] %}
+            {% if session["page_title"] %}
+                <title>[{{ session["arm_name"] }}] - {{ session["page_title"] }} - ARM-Lite</title>
+            {% endif %}
+        {% else %}
+            <title>ARM-Lite</title>
+        {% endif %}
+    </head>
+{% endblock %}
