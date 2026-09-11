@@ -8,13 +8,31 @@
     </div>
     <!-- Main -->
     <div class="container h-100 mx-auto">
-        <nav class="navbar navbar-expand-md navbar-dark bg-primary justify-content-center fixed-top my-auto">
-            <a class="navbar-brand" href="url_for('home')">
+        <nav class="navbar navbar-expand-md navbar-dark justify-content-center fixed-top my-auto">
+            <div class="navbar-brand" href="url_for('home')">
                 <span class="brand-mark" aria-hidden="true"></span>
                 <div>
                     <h1>A.R.M. - Lite</h1>
+                    <p class="tagline">Load, Identify, Pick what to keep</p>
                 </div>
-            </a>
+            </div>
+            <div class="navbar-nav ml-auto">
+                <a id="navhome" class="nav-link" href="{{ url_for('home') }}">Home</a>
+                <a id="navsettings" class="nav-link" href="{{ url_for('settings.settings_page') }}">Settings</a>
+                <a id="navhistory" class="nav-link" href="#">History</a>
+                <a id="navdatabase" class="nav-link" href="#">Database</a>
+                <a id="navlogs" class="nav-link" href="#">Logs</a>
+                <a id="restart" class="nav-link" href="#">
+                    <button type="button" class="btn btn-primary position-relative" id="restartui">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" 
+                            fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+                            <line x1="12" y1="2" x2="12" y2="12"></line>
+                        </svg>
+                    </button>
+                </a>
+            </div>
         </nav>
     </div>
 {% endblock %}
