@@ -42,6 +42,10 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 from arm_lite.ui import routes
+from arm_lite.ui.auth.auth import route_auth
+from arm_lite.ui.settings.settings import route_settings
+app.register_blueprint(route_auth)
+app.register_blueprint(route_settings)
 
 import logging
 logging.getLogger("werkzeug").setLevel(logging.ERROR)
