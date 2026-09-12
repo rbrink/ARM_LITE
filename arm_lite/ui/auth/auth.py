@@ -1,21 +1,51 @@
 import bcrypt
 from flask import Blueprint, render_template, redirect, flash, \
     request, session
-from flask_login import LoginManager, login_required, current_user, \
+from flask_login import login_required, current_user, \
     login_user, logout_user
 from sqlite3 import OperationalError
 
 import arm_lite.ui.utils as utils
-from arm_lite.ui import app, db
+from arm_lite.ui import app, db, login_manager
 from arm_lite.models.user import User
-from arm_lite.ui.forms import SetupForm, PasswordReset
+from arm_lite.ui.forms import SetupForm, PasswordReset, AdminSetupForm
 
 route_auth = Blueprint("auth", __name__,
                        template_folder="templates",
                        static_folder="./static")
 
-login_manager = LoginManager()
-login_manager.init_app(app)
+@route_auth.route("/setup-admin", methods=["GET", "POST"])
+def setup_admin():
+    """Create the first admin user when the database is empty."""
+    if User.query.first() is not None:
+        if current_user.is_authenticated:
+            return redirect('/index')
+        return redirect('/login')
+
+    form = AdminSetupForm()
+    if form.validate_on_submit():
+        admin_email = form.username.data.strip()
+        admin_password = form.password.data.strip().encode('utf-8')
+
+        if User.query.filter_by(email=admin_email).first():
+            flash("An admin account with that email already exists.", "warning")
+            return render_template('setup_admin.html', form=form)
+
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(admin_password, salt)
+        admin = User(email=admin_email, password=hashed_password, hashed=salt)
+
+        try:
+            db.session.add(admin)
+            db.session.commit()
+            flash("Admin account created. Please log in.", "success")
+            return redirect('/login')
+        except Exception as error:
+            db.session.rollback()
+            app.logger.error(f"Error creating admin user: {error}")
+            flash(str(error), "danger")
+
+    return render_template('setup_admin.html', form=form)
 
 @route_auth.route("/login", methods=["GET", "POST"])
 def login():
@@ -24,16 +54,17 @@ def login():
     if current_user.is_authenticated:
         return_redirect = redirect('/index')
 
+    admin = User.query.first()
+    if admin is None:
+        flash("No admin account exists yet. Create the initial admin user.", "warning")
+        return redirect('/setup-admin')
+
     form = SetupForm()
     if form.validate_on_submit():
         login_username = form.username.data.strip()
         login_password = form.password.data.strip().encode('utf-8')
-        # we know there is only ever 1 admin account, so we can pull it and check against it locally
-        admin = User.query.filter_by().first()
         app.logger.debug("user= " + str(admin))
-        # our pass
         password = admin.password
-        # hashed pass the user provided
         login_hashed = bcrypt.hashpw(login_password, admin.hash)
 
         if login_hashed == password and login_username == admin.email:
@@ -58,7 +89,6 @@ def logout():
     logout_user()
     flash("logged out", "success")
     return redirect('/')
-
 
 @route_auth.route('/update_password', methods=['GET', 'POST'])
 @login_required

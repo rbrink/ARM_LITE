@@ -1,0 +1,30 @@
+{% extends 'support/base_simple.html' %}
+{% block content %}
+    <div style="padding-top: 100px;">
+        <form id="form1" name="form1" method="post" action="/setup-admin" style="width: 100%; max-width: 420px; margin: 0 auto;">
+            {{ form.hidden_tag() }}
+            <h3 class="row justify-content-center">Create Admin</h3>
+            <div class="bordered-container justify-content-center mx-auto">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="usr">Email:</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="username" name="username" placeholder="admin@example.com" value="" aria-describedby="usr">
+                    {% for error in form.username.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Password:</span>
+                    </div>
+                    <input type="password" class="form-control" name="password" aria-label="password" aria-describedby="basic-addon1">
+                    {% for error in form.password.errors %}
+                        <div class="text-danger">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <button class="btn btn-secondary btn-lg btn-block" form="form1" type="submit">Create Admin</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

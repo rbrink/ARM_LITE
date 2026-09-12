@@ -19,6 +19,13 @@ class SetupForm(FlaskForm):
     submit = SubmitField('Submit')
 
 
+class AdminSetupForm(FlaskForm):
+    """Form used to create the first admin account when the DB is empty."""
+    username = StringField('username', validators=[DataRequired()])
+    password = PasswordField('password', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+
 class PasswordReset(FlaskForm):
     """
     Password reset form.

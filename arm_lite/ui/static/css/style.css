@@ -650,3 +650,13 @@ input[type="checkbox"] {
   .drive-pill.has-media .dot { animation: none; }
   .disc-card:hover { transform: none; }
 }
+
+.bordered-container {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  border: 2px solid var(--border);
+  border-radius: 9px;
+  padding: 20px;
+  max-width: 250px;
+}
+

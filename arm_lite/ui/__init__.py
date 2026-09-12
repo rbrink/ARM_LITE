@@ -1,6 +1,7 @@
 import os
 import secrets
 from flask import Flask
+from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
 from logging.config import dictConfig
@@ -34,6 +35,8 @@ dictConfig({
 app = Flask(__name__)
 csrf = CSRFProtect()
 csrf.init_app(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 app.config["SECRET_KEY"] = utils.get_or_create_secret_key()
 app.config["SQLALCHEMY_DATABASE_URI"] = sqlitefile
@@ -43,8 +46,10 @@ db = SQLAlchemy(app)
 
 from arm_lite.ui import routes
 from arm_lite.ui.auth.auth import route_auth
+from arm_lite.ui.database.database import route_database
 from arm_lite.ui.settings.settings import route_settings
 app.register_blueprint(route_auth)
+app.register_blueprint(route_database)
 app.register_blueprint(route_settings)
 
 import logging

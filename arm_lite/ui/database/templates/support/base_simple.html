@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% include 'head.html' %}
+    <body>
+        {% block nav %}
+            <!-- TOAST -->
+            <div aria-live="polite" aria-atomic="true">
+                <!-- Position it -->
+                <div id="toastHolder" style="position: fixed; top: 30%; right: 10%;z-index: 1000;">
+                    <!-- TOASTS -->
+                </div>
+            </div>
+            <!-- Main -->
+            <div class="container h-100 mx-auto">
+                <nav class="navbar justify-content-center fixed-top my-auto">
+                    <div class="navbar-brand">
+                        <span class="brand-mark" aria-hidden="true"></span>
+                        <div>
+                            <h1>A.R.M. - Lite</h1>
+                            <p class="tagline">Load, Identify, Pick what to keep</p>
+                        </div>
+                    </div>
+                    <div class="navbar-nav ml-auto">
+                        <a id="navhome" class="nav-link" href="{{ url_for('home') }}">Home</a>
+                        <a id="navlogin" class="nav-link" href="login">Login</a>
+                    </div>
+                </nav>
+            </div>
+        {% endblock %}
+        <!-- Errors -->
+        <div id="content" class="content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div id="message1" class="alert alert-{{ category if category != message else 'info' }} text-center" role="alert">
+                            <h4 class="alert-heading">{{ message|safe }}</h4>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </div>
+        {% block js %}
+        {% endblock %}
+    </body>
+</html>
