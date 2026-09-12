@@ -15,6 +15,8 @@ def yaml_check_groups(comments: dict, key):
                       'HB_PRESETS_FILE': "\n" + comments['ARM_CFG_GROUPS']['HANDBRAKE'],
                       'CUETOOLS_PATH': "\n" + comments['ARM_CFG_GROUPS']['CUETOOLS'],
                       'FFMPEG_CLI': "\n" + comments['ARM_CFG_GROUPS']['FFMPEG'],
+                      'EMBY_REFRESH': "\n" + comments['ARM_CFG_GROUPS']['EMBY']
+                                      + "\n" + comments['ARM_CFG_GROUPS']['EMBY_ADDITIONAL'],
                       'METADATA_PROVIDER': "\n" + comments['ARM_CFG_GROUPS']['METADATA']}
     if key in comment_groups:
         arm_cfg = comment_groups[key]
