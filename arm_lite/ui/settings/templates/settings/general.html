@@ -1,0 +1,52 @@
+{% block general %}
+    <style>
+        .general-card-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -12px;
+        }
+        .general-card-col {
+            flex: 0 0 50%;
+            max-width: 50%;
+            padding: 0 12px;
+            display: flex;
+        }
+        .general-card-col .card {
+            width: 100%;
+        }
+        @media (max-width: 767px) {
+            .general-card-col {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+    </style>
+    <div class="tab-pane active pt-5" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <div class="general-card-row">
+            <div class="general-card-col">
+                <div class="card">
+                    <div class="card-header">Server Details</div>
+                    <div class="card-body col">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                Datetime: {{ stats["server_datetime"] }} <br>
+                                Timezone: {{ stats["server_timezone"] }}
+                            </li>
+                            <li class="list-group-item">
+                                Python version: <code>{{ stats['python_version'] }}</code><br>
+                                ARM Lite version: <code>{{ stats['arm_local_version'] }}</code><br>
+                                {% if not stats['updated'] %}
+                                    <i>&nbsp;<a href="https://api.github.com/repos/rbrink/ARM_LITE/commits/main" target="_blank">Update Available</a>
+                                    Version: </i> <code>{{ stats['arm_remote_version'] }}</code><br>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="general-card-col">
+                {% include 'settings/drives.html' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -70,17 +70,17 @@ TRANSCODE_PATH: ""
 COMPLETED_PATH: ""
 
 # Path to installation of ARM 
-INSTALL_PATH: ""
+INSTALL_PATH: "${USERPROFILE}/python/ARM_LITE v3/"
 
-LOG_PATH: ""
+# Path to directory to hold log files
+# Make sure to include trailing /
+LOGPATH: ""
 
 # Log level.  DEBUG, INFO, WARNING, ERROR, CRITICAL
 # The default is INFO
 # If you are experiencing difficulties set this to DEBUG
 LOGLEVEL: "INFO"
 
-# How long to let log files live before deleting (in days)
-# Set to 0 to disable
 LOGLIFE: 1
 
 # Path to ARM database file
@@ -181,7 +181,42 @@ WEBSERVER_PORT: 5000
 
 DEBUG_MODE: true
 
-FLASK_SECRET_KEY: "1ff7c030c2decf877b0cf98241eeb83b5a7e1987dc30348070e805e05b7ab23d"
+FLASK_SECRET_KEY: "6c313df9880ed8a65719f8c687bd82c3145ddc7b1e34905e0afff3be9a4bc9aa"
+
+#####################
+## Emby Parameters ##
+#####################
+# Parameters to enable automatic library scan in Emby.  This will trigger only if MainFeature is true above.
+# Scan emby library after successful placement of mainfeature (see above)
+EMBY_REFRESH: false
+
+# Server parameters
+# Server can be ip address or domain name
+EMBY_SERVER: ""
+EMBY_PORT: 8096
+
+# Emby authentication fluff parameters.  These can be anything.
+
+EMBY_CLIENT: "ARM"
+EMBY_DEVICE: "ARM"
+EMBY_DEVICEID: "ARM"
+
+# Emby authentication parameters.  These are parameters that must be set to a current user in Emby.
+EMBY_USERNAME: ""
+
+# EMBY_USERID is the user ID associated with the username above.  You can find this by going to the following address on your emby server
+# <server>:<port>/Users/Public and getting the ID value for the username above.
+EMBY_USERID: ""
+
+# This is the SHA1 encrypted password for the username above.  You can generate the SHA1 hash of your password by executing the following at
+# the command line: 
+# echo -n your-password | sha1sum | awk '{print $1}'
+# or using an online generator like the one located at http://www.sha1-online.com/
+EMBY_PASSWORD: ""
+
+# Emby API key.  This can be found (generated) by going to Advanced/Security in the 
+# Emby dashboard
+EMBY_API_KEY: ""
 
 ######################
 # Metadata Providers #

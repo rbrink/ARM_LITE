@@ -7,7 +7,6 @@ from flask_wtf import CSRFProtect
 from logging.config import dictConfig
 
 import arm_lite.config.config as cfg
-import arm_lite.ui.utils as utils
 
 sqlitefile = "sqlite:///" + cfg.arm_config.get("DBFILE")
 
@@ -38,7 +37,19 @@ csrf.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-app.config["SECRET_KEY"] = utils.get_or_create_secret_key()
+def _get_or_create_secret_key() -> str:
+    key = cfg.arm_config.get("FLASK_SECRET_KEY")
+    if key:
+        return key
+    key = secrets.token_hex(32)
+    cfg.arm_config["FLASK_SECRET_KEY"] = key
+    try:
+        cfg.build_config()
+    except Exception as e:
+        print(f"WARN: Could not persist generated FLASK_SECRET_KEY to arm_lite.yaml: {e}")
+    return key
+
+app.config["SECRET_KEY"] = _get_or_create_secret_key()
 app.config["SQLALCHEMY_DATABASE_URI"] = sqlitefile
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 

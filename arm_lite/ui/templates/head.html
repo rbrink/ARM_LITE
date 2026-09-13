@@ -8,7 +8,47 @@
         <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-        
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const tabLinks = document.querySelectorAll('.nav-tabs .nav-link');
+                const tabPanes = document.querySelectorAll('.tab-pane');
+
+                tabLinks.forEach(function (link) {
+                    link.addEventListener('click', function (event) {
+                        event.preventDefault();
+
+                        const targetId = this.getAttribute('href');
+                        if (!targetId || targetId === '#') {
+                            return;
+                        }
+
+                        tabLinks.forEach(function (tab) {
+                            tab.classList.remove('active');
+                            tab.setAttribute('aria-selected', 'false');
+                        });
+
+                        tabPanes.forEach(function (pane) {
+                            pane.classList.remove('active');
+                        });
+
+                        this.classList.add('active');
+                        this.setAttribute('aria-selected', 'true');
+
+                        const targetPane = document.querySelector(targetId);
+                        if (targetPane) {
+                            targetPane.classList.add('active');
+                        }
+                    });
+                });
+            });
+        </script>
+                
         <!-- Set Page Title -->
         {% if session["arm_name"] %}
             {% if session["page_title"] %}

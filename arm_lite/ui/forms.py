@@ -18,13 +18,11 @@ class SetupForm(FlaskForm):
     password = PasswordField('password', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
-
 class AdminSetupForm(FlaskForm):
     """Form used to create the first admin account when the DB is empty."""
     username = StringField('username', validators=[DataRequired()])
     password = PasswordField('password', validators=[DataRequired()])
     submit = SubmitField('Submit')
-
 
 class PasswordReset(FlaskForm):
     """
@@ -41,4 +39,30 @@ class PasswordReset(FlaskForm):
     username = StringField('username', validators=[DataRequired()])
     old_password = PasswordField('password', validators=[DataRequired()])
     new_password = PasswordField('password', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+class GeneralSettingsForm(FlaskForm):
+    SKIP_TRANSCODE = BooleanField("Skip Transcoding: ")
+    VIDEO_TYPE = SelectField("Video Type: ", choices=[("Auto", "auto"), ("Movie", "movie"), ("Series", "series")])
+    DATE_FORMAT = StringField("Date Format:", validators=[DataRequired()])
+    AUTO_EJECT = BooleanField("Auto Eject Disc: ")
+    DELRAWFILES = BooleanField("Delete After Trancode: ")
+    submit = SubmitField("Submit")
+
+class SystemInfoDrives(FlaskForm):
+    """
+    SystemInformation Form, to update system drive name (nickname) and description
+      - /systeminfo
+      - /settings
+    """
+    id = IntegerField('Drive ID', validators=[DataRequired()])
+    name = StringField('Name', validators=[DataRequired()])
+    description = StringField('Description', validators=[Optional()])
+    drive_mode = SelectField('Drive Mode',
+                             validators=[DataRequired()],
+                             choices=[
+                                 ('auto', 'Auto'),
+                                 ('manual', 'Manual')
+                             ],
+                             )
     submit = SubmitField('Submit')

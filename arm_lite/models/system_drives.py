@@ -29,14 +29,14 @@ class SystemDrives(db.Model):
     type = db.Column(db.String(20))
     mount = db.Column(db.String(100))    # Windows drive letter, e.g. "D:"
     open = db.Column(db.Boolean)
-    job_id_current = db.Column(db.Integer, db.ForeignKey("job.job_id"))
-    job_id_previous = db.Column(db.Integer, db.ForeignKey("job.job_id"))
+    job_id_current = db.Column(db.Integer, db.ForeignKey("Jobs.job_id"))
+    job_id_previous = db.Column(db.Integer, db.ForeignKey("Jobs.job_id"))
     description = db.Column(db.Unicode(200))
     drive_mode = db.Column(db.String(100))
  
-    # relationship - join current and previous jobs to the jobs table
-    job_current = db.relationship("Job", backref="Current", foreign_keys=[job_id_current])
-    job_previous = db.relationship("Job", backref="Previous", foreign_keys=[job_id_previous])
+    # relationship - join current and previous jobs to the Job model
+    job_current = db.relationship("Job", backref=db.backref("current_drive", uselist=False), foreign_keys=[job_id_current])
+    job_previous = db.relationship("Job", backref=db.backref("previous_drive", uselist=False), foreign_keys=[job_id_previous])
  
     def __init__(self, name, mount, job, job_previous, description):
         self.name = name

@@ -10,7 +10,7 @@ class Config(db.Model):
     __tablename__ = "Configuration"
 
     CONFIG_ID = db.Column(db.Integer, primary_key=True)
-    job_id = db.Column(db.Integer, db.ForeignKey("job.job_id"))
+    job_id = db.Column(db.Integer, db.ForeignKey("jobs.job_id"))
     SKIP_TRANSCODE = db.Column(db.Boolean)
     VIDEO_TYPE = db.Column(db.String(25))
     MINLENGTH = db.Column(db.Integer)

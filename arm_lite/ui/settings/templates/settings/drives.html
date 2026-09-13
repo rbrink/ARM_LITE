@@ -1,0 +1,80 @@
+{% block drives %}
+    <div class="card">
+        <div class="card-header">Disk Drives</div>
+        <div class="card-body">
+            {% if drives %}
+                <div class="accordion" id="driveAccordion">
+                    {% for drive in drives %}
+                        <div class="row">
+                            <div class="card w-100">
+                                <form id="systemForm{{ drive.drive_id }}" name="systemForm{{ drive.drive_id }}" action="/system-info" method="post">
+                                    {{ form_drive.hidden_tag() }}
+                                    <div class="card-header" id="{{ drive.serial_id }}">
+                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#drive{{ drive.drive_id }}" aria-expanded="{{ 'true' if loop.first else 'false' }}" aria-controls="drive{{ drive.drive_id }}">
+                                            {{ drive.name }}
+                                        </button>
+                                    </div>
+                                    <div id="drive{{ drive.drive_id }}" class="collapse {% if loop.first %}show{% endif %}" aria-labelledby="{{ drive.serial_id }}">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-sm-9">
+                                                    <div class="form-group row my-0">
+                                                        <div class="col-sm-4 col-form-label px-1">Serial</div>
+                                                        <div class="col-sm-8 col-form-label px-1 small" id="type">
+                                                            {{ drive.maker }}
+                                                            <i>{{ drive.model }} </i>
+                                                            {{ drive.serial }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <figure class="figure small float-right">
+                                                        <img 
+                                                            class="image-fluid"
+                                                            src="{{ url_for('static', filename='img/drive-optical_closed.svg') }}"
+                                                            alt="Drive Unavailable"
+                                                            title="Available">
+                                                        <figcaption class="figure-caption text-left invisible">Placeholder</figcaption>
+                                                    </figure>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="form-group row my-0">
+                                                        <label for="name" class="col-sm-3 col-form-label px-1">Name</label>
+                                                        <input class="col-sm-9 form-control form-control-sm px-1" type="text" id="name" name="name" maxlength="100" value="{{ drive.name }}">
+                                                        <input type="hidden" id="id" name="id" value="{{ drive.drive_id }}">
+                                                    </div>
+                                                    <div class="form-group row my-0">
+                                                        <label for="description" class="col-sm-3 col-form-label px-1">Description</label>
+                                                        <input class="col-sm-9 form-control form-control-sm px-1" type="text" id="description" name="description" maxlength="200" value="{{ drive.description }}">
+                                                        <input type="hidden" id="id" name="id" value="{{ drive.drive_id }}">
+                                                    </div>
+                                                    <div class="form-group row my-0">
+                                                        <label for="drive_mode" class="col-sm-3 col-form-label px-1">Drive Mode</label>
+                                                        <select class="col-sm-9 form-control form-control-sm px-1" id="drive_mode" name="drive_mode">
+                                                            <option value="auto" {% if drive.drive_mode == 'auto' %}selected{% endif %}>Auto</option>
+                                                            <option value="manual" {% if drive.drive_mode == 'manual' %}selected{% endif %}>Manual</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="card text-white bg-danger">
+                    No drives installed on this system.
+                </div>
+            {% endif %}
+        </div>
+        <div class="card-footer">
+            <p><a href="systemdrivescan">Scan for Drives</a></p>
+            <p><i><u>Note:</u> Ripping does not require drives to be listed in the UI here. However, if a drive does not show up, there may be an issue with the docker container settings.</i></p>
+        </div>
+    </div>
+{% endblock %}
