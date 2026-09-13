@@ -69,6 +69,7 @@ def settings_page():
         "python_version": platform.python_version(),
         "arm_local_version": arm_version_local,
         "arm_remote_version": arm_version_remote,
+        'git_commit': local_get_hash,
         "updated": ui_utils.git_check_updates(local_get_hash),
         "hw_support": check_hw_transcode_support()
     }
@@ -78,7 +79,6 @@ def settings_page():
     media_path = os.path.expandvars(cfg.arm_config.get("COMPLETED_PATH"))
 
     drives = drive_utils.get_drives()
-    print(f"DEBUG: drives - {drives}")
     form_drive = SystemInfoDrives(request.form)
 
     comments = ui_utils.generate_comments()
