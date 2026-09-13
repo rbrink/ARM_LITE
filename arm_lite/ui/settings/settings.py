@@ -13,6 +13,7 @@ from arm_lite.ui.forms import GeneralSettingsForm, SystemInfoDrives
 from arm_lite.ui.settings import DriveUtils as drive_utils
 from arm_lite.ui.settings.ServerUtil import ServerUtil
 from arm_lite.core.ProcessHandler import arm_subprocess
+from arm_lite.models.job import Job
 from arm_lite.models.system_drives import SystemDrives
 from arm_lite.models.system_info import SystemInfo
 
@@ -56,6 +57,13 @@ def check_hw_transcode_support():
 @route_settings.route('/settings')
 @login_required
 def settings_page():
+    # stats for info page
+    failed_rips = Job.query.filter_by(status="fail").count()
+    total_rips = Job.query.filter_by().count()
+    movies = Job.query.filter_by(video_type="movie").count()
+    series = Job.query.filter_by(video_type="series").count()
+    cds = Job.query.filter_by(disc_type="music").count()
+
     # Get server time and timezone
     current_time = datetime.now()
     server_datetime = current_time.strftime(cfg.arm_config.get("DATE_FORMAT"))
@@ -69,7 +77,12 @@ def settings_page():
         "python_version": platform.python_version(),
         "arm_local_version": arm_version_local,
         "arm_remote_version": arm_version_remote,
-        'git_commit': local_get_hash,
+        "git_commit": local_get_hash,
+        "movies_ripped": movies,
+        "series_ripped": series,
+        "cds_ripped": cds,
+        "no_failed_rips": failed_rips,
+        "total_rips": total_rips,
         "updated": ui_utils.git_check_updates(local_get_hash),
         "hw_support": check_hw_transcode_support()
     }
