@@ -7,7 +7,7 @@
                     {% for drive in drives %}
                         <div class="row">
                             <div class="card w-100">
-                                <form id="systemForm{{ drive.drive_id }}" name="systemForm{{ drive.drive_id }}" action="/system-info" method="post">
+                                <form id="systemForm{{ drive.drive_id }}" name="systemForm{{ drive.drive_id }}" action="/system-info" method="post" class="drive-card-form">
                                     {{ form_drive.hidden_tag() }}
                                     <div class="card-header" id="{{ drive.serial_id }}">
                                         <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#drive{{ drive.drive_id }}" aria-expanded="{{ 'true' if loop.first else 'false' }}" aria-controls="drive{{ drive.drive_id }}">
@@ -16,8 +16,8 @@
                                     </div>
                                     <div id="drive{{ drive.drive_id }}" class="collapse {% if loop.first %}show{% endif %}" aria-labelledby="{{ drive.serial_id }}">
                                         <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-sm-9">
+                                            <div class="drive-meta-row">
+                                                <div class="drive-meta-panel">
                                                     <div class="form-group row my-0">
                                                         <div class="col-sm-4 col-form-label px-1">Serial</div>
                                                         <div class="col-sm-8 col-form-label px-1 small" id="type">
@@ -26,16 +26,26 @@
                                                             {{ drive.serial }}
                                                         </div>
                                                     </div>
+                                                    <div class="form-group row my-0">
+                                                        <div class="col-sm-4 col-form-label px-1">Type</div>
+                                                        <div class="col-sm-8 col-form-label px-1 small" id="type">{{ drive.type }}</div>
+                                                    </div>
+                                                    {% if drive.mount %}
+                                                        <div class="form-group row my-0">
+                                                            <div class="col-sm-4 col-form-label px-1">Mount Path</div>
+                                                            <div class="col-sm-8 col-form-label px-1 small" alt="test">{{ drive.mount }}</div>
+                                                        </div>
+                                                    {% endif %}
                                                 </div>
-                                                <div class="col-sm-3">
-                                                    <figure class="figure small float-right">
-                                                        <img 
-                                                            class="image-fluid"
+                                                <div class="drive-figure-box">
+                                                    <figure class="figure small mb-0 drive-figure">
+                                                        <img
+                                                            class="img-fluid drive-icon"
                                                             src="{{ url_for('static', filename='img/drive-optical_closed.svg') }}"
                                                             alt="Drive Unavailable"
                                                             title="Available">
-                                                        <figcaption class="figure-caption text-left invisible">Placeholder</figcaption>
                                                     </figure>
+                                                    <div class="drive-caption">Optical Drive</div>
                                                 </div>
                                             </div>
                                             <div class="row">

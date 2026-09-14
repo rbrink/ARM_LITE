@@ -22,7 +22,10 @@ if _PACKAGE_NAME not in sys.modules:
     _spec.loader.exec_module(_module)
 
 import arm_lite.config.config as cfg
+from arm_lite.core import identify
+from arm_lite.core.disc_monitor import monitor
 from arm_lite.ui import app, db
+from arm_lite.ui.settings.DriveUtils import drives_update
 
 shdwn_requested = False
 def handle_shutdown(signum, frame):
@@ -54,6 +57,20 @@ if __name__ == "__main__":
         app.logger.info(f"Starting ARM_Lite on interface address: {host}:{port}")
         with app.app_context():
             db.create_all()
+            drives_update()
+        def _on_disc_inserted(drive, state):
+            with app.app_context():
+                identify.handle_disc_inserted(drive, state)
+
+        def _on_disc_removed(drive, state):
+            with app.app_context():
+                identify.handle_disc_removed(drive, state)
+
+        monitor.on_disc_inserted = _on_disc_inserted
+        monitor.on_disc_removed = _on_disc_removed
+        monitor.start()
+        app.logger.info(f"Watching optical drives every {cfg.arm_config.get('POLL_INTERVAL_SECONDS', 3)}s")
+        
         app.run(host=host, port=port, debug=debug_mode, use_reloader=False)
     except KeyboardInterrupt:
         app.logger.info("Keyboard Interrupt received, shutting down...")

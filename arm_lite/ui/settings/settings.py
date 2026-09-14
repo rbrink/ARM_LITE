@@ -19,8 +19,7 @@ from arm_lite.models.system_info import SystemInfo
 
 route_settings = Blueprint("settings", __name__,
                            static_folder="./static",
-                           template_folder="templates",
-                           url_prefix="/settigns")
+                           template_folder="templates")
 REDIRECT_SETTINGS = "settings.settings_page"
 
 def check_hw_transcode_support():
@@ -116,6 +115,7 @@ def save_settings():
     arm_cfg = {}
     form = GeneralSettingsForm()
     if form.validate_on_submit():
+        print(f"DEBUG: form data - {request.form.to_dict}")
         arm_cfg = ui_utils.build_arm_cfg(request.form.to_dict(), comments)
         try:
             with open(cfg.arm_config_path, 'w') as settings_file:

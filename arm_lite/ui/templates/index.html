@@ -4,5 +4,22 @@
     {% extends 'support/base_simple.html' %}
 {% endif %}
 {% block content %}
+    <main>
+        <section class="shelf" id="shelf" aria-live="polite">
+            <div class="empty-state" id="emptyState">
+            <div class="empty-disc" aria-hidden="true"></div>
+                <h2>No discs identified yet</h2>
+                <p>Load a DVD, Blu-ray, or audio CD into a drive. Disc Station picks up the
+                    insertion automatically and looks up the title — nothing else happens
+                    until you tell it to.</p>
+            </div>
+            <!-- disc cards injected here -->
+        </section>
+
+        <section class="jobs-panel" id="jobsPanel" hidden>
+            <h2>Rip queue</h2>
+            <div id="jobsList"></div>
+        </section>
+    </main>
 
 {% endblock %}

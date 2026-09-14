@@ -1,30 +1,76 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container" style="max-width: initial!important;">
-    <div class="row">
-        <div class="col">
-            <div class="jumbotron settings-tab-shell" style="padding-top: 1rem;">
-                <ul class="nav nav-tabs flex-column" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                               aria-controls="home" aria-selected="true">General Info</a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="system-tab" data-toggle="tab" href="#system" role="tab"
-                               aria-controls="system" aria-selected="true">System Information</a>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab"
-                               aria-controls="settings" aria-selected="true">Ripper Settings</a>
-                    </li>
-                </ul>
-                <div class="tab-content settings-tab-content" style="max-width: initial;">
-                    {% include 'settings/general.html' %}
-                    {% include 'settings/tab_systeminfo.html' %}
-                    {% include 'settings/ripper.html' %}
+    <div class="container" style="max-width: initial!important;">
+        <div class="row">
+            <div class="col">
+                <div class="jumbotron settings-tab-shell" style="padding-top: 1rem;">
+                    <ul class="nav nav-tabs flex-column" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                                   aria-controls="home" aria-selected="true">General Info</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="system-tab" data-toggle="tab" href="#system" role="tab"
+                                   aria-controls="system" aria-selected="true">System Information</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab"
+                                   aria-controls="settings" aria-selected="true">Ripper Settings</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content settings-tab-content" style="max-width: initial;">
+                        {% include 'settings/general.html' %}
+                        {% include 'settings/tab_systeminfo.html' %}
+                        {% include 'settings/ripper.html' %}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+{% endblock %}
+{% block js %}
+    {{ super() }}
+    <script type="application/javascript">
+        $(function () {
+            let toastCount = 0;
+
+            function sendSettings(formToSend, sendTo) {
+                $.ajax({
+                    type: 'POST',
+                    url: sendTo,
+                    data: formToSend.serialize()
+                }).done(function (data) {
+                    if (data.success === true) {
+                        console.log(data)
+                        var dt = new Date();
+                        var time = `${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}`;
+                        addToast("Saved Successfully", `Saved ${data.form} settings at ${time}`, toastCount);
+                        toastCount++;
+                    }
+                });
+            }
+
+            $("#uiSettings").submit(function (e) {
+                e.preventDefault();
+                sendSettings($("#uiSettings"), "/save_ui_settings");
+            });
+            $("#settings").submit(function (e) {
+                e.preventDefault();
+                sendSettings($("#ripperSettings"), "/save_settings");
+            });
+            $("#updateArm").submit(function (e) {
+                e.preventDefault();
+                sendSettings($("#updateArm"), "/update_arm")
+            })
+            $(".popovers").popover({
+                trigger: "hover",
+            });
+            {% if form.errors %}
+                {% for k in form.errors %}
+                    $("[name='{{k}}']").addClass("is-invalid");
+                {% endfor %}
+            {% endif %}
+            activeTab("armsettings");
+        });
+    </script>
 {% endblock %}
