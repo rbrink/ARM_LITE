@@ -113,20 +113,23 @@ def save_settings():
     comments = ui_utils.generate_comments()
     success = False
     arm_cfg = {}
-    form = GeneralSettingsForm()
-    if form.validate_on_submit():
-        print(f"DEBUG: form data - {request.form.to_dict}")
-        arm_cfg = ui_utils.build_arm_cfg(request.form.to_dict(), comments)
+
+    if request.method == "POST" and request.form:
+        form_data = request.form.to_dict()
+        app.logger.debug(f"DEBUG: form data - {form_data}")
         try:
+            arm_cfg = ui_utils.build_arm_cfg(form_data, comments)
             with open(cfg.arm_config_path, 'w') as settings_file:
                 settings_file.write(arm_cfg)
-                settings_file.close()
             success = True
             importlib.reload(cfg)
-            app.logger.info(f"Setting log level to: {cfg.arm_config["LOGLEVEL"]}")
-            app.logger.setLevel(cfg.arm_config["LOGLEVEL"])
-        except OSError as e:
-            app.logger.error(f"{cfg.arm_config_path} is read-only", exc_info=e)
+            log_level = cfg.arm_config.get("LOGLEVEL", "INFO")
+            app.logger.info(f"Setting log level to: {log_level}")
+            app.logger.setLevel(log_level)
+        except Exception as e:
+            app.logger.exception("Unable to save ARM settings")
+            return {'success': False, 'error': str(e), 'form': "arm ripper settings"}
+
     return {'success': success, 'settings': cfg.arm_config, 'form': "arm ripper settings"}
 
 @route_settings.route("/system-info", methods=["POST"])

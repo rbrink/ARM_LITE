@@ -54,17 +54,19 @@
                 e.preventDefault();
                 sendSettings($("#uiSettings"), "/save_ui_settings");
             });
-            $("#settings").submit(function (e) {
+            $("#ripperSettings").on("click", function (e) {
                 e.preventDefault();
-                sendSettings($("#ripperSettings"), "/save_settings");
+                sendSettings($("#ripperSettings"), "/save-settings");
             });
             $("#updateArm").submit(function (e) {
                 e.preventDefault();
                 sendSettings($("#updateArm"), "/update_arm")
             })
-            $(".popovers").popover({
-                trigger: "hover",
-            });
+            if ($.fn.popover) {
+                $(".popovers").popover({
+                    trigger: "hover",
+                });
+            }
             {% if form.errors %}
                 {% for k in form.errors %}
                     $("[name='{{k}}']").addClass("is-invalid");

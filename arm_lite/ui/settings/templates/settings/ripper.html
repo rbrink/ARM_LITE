@@ -3,7 +3,7 @@
         <div class="settings-section">
             <h2>ARM Lite Ripper Settings</h2>
             <p class="settings-section-hint">Configure the ripper values used by ARM-Lite.</p>
-            <form id="ripperSettings" name="ripperSettings" method="post" action="" class="settings-form">
+            <form id="ripperSettings" name="ripperSettings" method="post" action="#" class="settings-form" onsubmit="return false;">
                 {{ form.hidden_tag() }}
                 {% for k, v in settings.items() %}
                     <div class="settings-field settings-inline-field">
@@ -25,7 +25,7 @@
                 {% endfor %}
                 <div class="settings-footer" style="padding-top: 18px; border-top: 1px solid var(--border); margin-top: 12px;">
                     <div></div>
-                    <button id="settings" class="btn btn-secondary" form="ripperSettings" type="submit">Submit</button>
+                    <button id="ripperSettingsSubmit" class="btn btn-secondary" type="button">Submit</button>
                 </div>
             </form>
         </div>

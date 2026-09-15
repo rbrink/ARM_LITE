@@ -104,6 +104,9 @@ def build_arm_cfg(form_data: dict, comments):
         # Skip the Cross Site Request Forgery (CSRF) token
         if key == "csrf_token":
             continue
+
+        if value is None:
+            value = ""
         # Strip whitespace from values to prevent issues with keys/values
         if isinstance(value, str):
             value = value.strip()
@@ -116,19 +119,14 @@ def build_arm_cfg(form_data: dict, comments):
         app.logger.debug(f"save_settings: [{key}] = {key_value} ")
 
         # Add any grouping comments
-        arm_cfg += config_utils.arm_yaml_check_groups(comments, key)
+        arm_cfg += config_utils.yaml_check_groups(comments, key)
         # Check for comments for this key in comments.json, add them if they exist
         try:
             arm_cfg += "\n" + comments[str(key)] + "\n" if comments[str(key)] != "" else ""
         except KeyError:
             arm_cfg += "\n"
-        # test if key value is an int
-        try:
-            post_value = int(value)
-            arm_cfg += f"{key}: {post_value}\n"
-        except ValueError:
-            # Test if value is Boolean
-            arm_cfg += config_utils.arm_yaml_test_bool(key, value)
+
+        arm_cfg += config_utils.yaml_check_list(key, value)
 
     app.logger.debug("save_settings: FINISH")
     return arm_cfg

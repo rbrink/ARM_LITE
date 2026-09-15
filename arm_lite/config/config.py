@@ -35,6 +35,47 @@ cur_config = load_config(arm_config_path)                                   # Lo
 arm_config = load_config(CONFIG_PATH.parent / "setup" / "arm_lite.yaml")    # Load Template Configuration
 arm_config.update(cur_config)                                               # Update Template Configuration with User Configuration
 
+def build_config(config: dict = None, write_path: str = None) -> str:
+    """
+    Rebuild arm_config.yaml with the human-readable comments from
+    comments.json, preserving the given config's values (defaults to the
+    live arm_config).
+    Args:
+        key (str): The configuration key to update.
+        value: The new value for the configuration key.
+    Returns:
+        str: The updated configuration as a YAML-formatted string.
+    """
+    config = arm_config if config is None else config
+    target_path = arm_config_path if write_path is None else write_path
+
+    try:
+        with open(COMMENTS_PATH, 'r') as comments_file:
+            comments = json.load(comments_file)
+    except (OSError, json.JSONDecodeError) as e:
+        print(f"ERROR: Unable to read comments file {COMMENTS_PATH} - {e}")
+        return ""
+
+    arm_cfg = comments["ARM_CFG_GROUPS"]["BEGIN"] + "\n\n"
+    for key, value in config.items():
+        arm_cfg += cfg_utils.yaml_check_groups(comments, key)    # Add any grouping comments
+        # Check for comments for this key in comments.json, add them if they exist
+        try:
+            if comment := comments[str(key)]:
+                arm_cfg += f"\n{comment}\n"
+        except KeyError:
+            arm_cfg += '\n'
+        arm_cfg += cfg_utils.yaml_check_list(key, value)
+
+    if target_path is not False:
+        try:
+            with open(target_path, 'w') as settings_file:
+                settings_file.write(arm_cfg)
+        except OSError as e:
+            print(f"ERROR: Unable to write {target_path} - {e}")
+
+    return arm_cfg
+
 def load_hb_presets(file_path: str | os.PathLike = None) -> dict[str, str]:
     """
     Load presets from a JSON file.
@@ -90,43 +131,3 @@ def save_config(new_config: dict, path: str = None):
         print(f"ERROR: Unable to reload HandBrake presets after save - {e}")
         hb_presets_cfg = {}
 
-def build_config(config: dict = None, write_path: str = None) -> str:
-    """
-    Rebuild arm_config.yaml with the human-readable comments from
-    comments.json, preserving the given config's values (defaults to the
-    live arm_config).
-    Args:
-        key (str): The configuration key to update.
-        value: The new value for the configuration key.
-    Returns:
-        str: The updated configuration as a YAML-formatted string.
-    """
-    config = arm_config if config is None else config
-    target_path = arm_config_path if write_path is None else write_path
-
-    try:
-        with open(COMMENTS_PATH, 'r') as comments_file:
-            comments = json.load(comments_file)
-    except (OSError, json.JSONDecodeError) as e:
-        print(f"ERROR: Unable to read comments file {COMMENTS_PATH} - {e}")
-        return ""
-
-    arm_cfg = comments["ARM_CFG_GROUPS"]["BEGIN"] + "\n\n"
-    for key, value in config.items():
-        arm_cfg += cfg_utils.yaml_check_groups(comments, key)    # Add any grouping comments
-        # Check for comments for this key in comments.json, add them if they exist
-        try:
-            if comment := comments[str(key)]:
-                arm_cfg += f"\n{comment}\n"
-        except KeyError:
-            arm_cfg += '\n'
-        arm_cfg += cfg_utils.yaml_check_list(key, value)
-
-    if target_path is not False:
-        try:
-            with open(target_path, 'w') as settings_file:
-                settings_file.write(arm_cfg)
-        except OSError as e:
-            print(f"ERROR: Unable to write {target_path} - {e}")
-
-    return arm_cfg

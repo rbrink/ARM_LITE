@@ -48,7 +48,7 @@ AUTO_EJECT: false
 POLL_INTERVAL_SECONDS: 3
 
 # List of drive letters if system has multiple drives (Optional add)
-DRIVE_LETTERS: []
+DRIVE_LETTERS: "[]"
 
 # Remove any files created in the raw and transcode paths for the job after processing is complete
 DELRAWFILES: true
@@ -59,22 +59,22 @@ DELRAWFILES: true
 
 # Path to raw MakeMKV directory
 # Destination for MakeMKV and source for HandBrake
-RAW_PATH: ""
+RAW_PATH: "C:/Users/Robert/python/ARM_LITE v3/development/raw/"
 
 # Intermediary directory for transcoding files
 # Destination for HandBrake
-TRANSCODE_PATH: ""
+TRANSCODE_PATH: "C:/Users/Robert/python/ARM_LITE v3/development/transcode/"
 
 # Final directory of transcoded files
 # Ripped and transcoded files end up here
-COMPLETED_PATH: ""
+COMPLETED_PATH: "C:/Users/Robert/python/ARM_LITE v3/development/completed/"
 
 # Path to installation of ARM 
 INSTALL_PATH: "${USERPROFILE}/python/ARM_LITE v3/"
 
 # Path to directory to hold log files
 # Make sure to include trailing /
-LOGPATH: ""
+LOGPATH: "C:/Users/Robert/python/ARM_LITE v3/development/logs/"
 
 # Log level.  DEBUG, INFO, WARNING, ERROR, CRITICAL
 # The default is INFO
